@@ -28,20 +28,25 @@ public class ValidateWebService {
         javascript = cacheResource("javascript.js");
     }
 
+    // @GET
+    // @Path("/")
+    // @Produces(MediaType.TEXT_HTML)
+    // public Response index() {
+    //     return Response.ok(indexHtml).build();
+    // }
+
+    // @GET
+    // @Path("/javascript.js")
+    // @Produces(MediaType.TEXT_HTML)
+    // public Response javascript() {
+    //     return Response.ok(javascript).build();
+    // }
+
     @GET
-    @Path("/")
-    @Produces(MediaType.TEXT_HTML)
-    public Response index() {
-
-        return Response.ok(indexHtml).build();
-    }
-
-    @GET
-    @Path("/javascript.js")
-    @Produces(MediaType.TEXT_HTML)
-    public Response javascript() {
-
-        return Response.ok(javascript).build();
+    @Path("/robots.txt")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String robots() {
+        return "User-agent: *\nDisallow: /\n";
     }
 
     @GET
