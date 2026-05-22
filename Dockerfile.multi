@@ -1,0 +1,26 @@
+# Stage 1: Build stage using JDK 23 and Gradle Wrapper
+FROM eclipse-temurin:23 AS build
+WORKDIR /workspace
+
+# Install findutils (for xargs) and dos2unix
+RUN apt-get update && apt-get install -y findutils dos2unix
+
+# Copy all project files
+COPY . .
+
+# Convert wrapper line endings and set permissions
+RUN dos2unix gradlew && chmod +x gradlew
+
+# Run gradle build installDist task
+RUN ./gradlew :api:installDist --no-daemon
+
+# Stage 2: Production runtime image
+FROM eclipse-temurin:23-jre
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y findutils
+
+# Copy the built distribution
+COPY --from=build /workspace/api/build/install/api /app
+
+CMD ["/app/bin/api"]
